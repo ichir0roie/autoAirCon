@@ -1,0 +1,16 @@
+
+Setting desired state for A/C.
+Panasonic A/C remote is in the following state:
+  Model: 6 (RKR)
+ Power: On
+ Mode: 3 (Cool)
+ Temp: 26C
+ Fan: 7 (Auto)
+ Swing(V): 15 (Auto)
+ Swing(H): 13 (Auto)
+ Quiet: Off
+ Powerful: Off
+ Clock: 00:00
+ On Timer: Off
+ Off Timer: Off
+IR Code: 0x0220E004000000060220E00400393480AF0D000EE0000089000026

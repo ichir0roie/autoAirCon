@@ -1,0 +1,12 @@
+label,Power,Mode,Temp,Fan,Swing(V),Quiet,Powerful,Clock,On Timer,Off Timer
+停止,Off,2 (Dry),26C,7 (Auto),1 (Highest),Off,Off,00:00,Off,Off
+冷房,On,3 (Cool),27C,7 (Auto),15 (Auto),Off,Off,00:00,Off,Off
+除湿,On,2 (Dry),26C,7 (Auto),1 (Highest),Off,Off,00:00,Off,Off
+暖房,On,4 (Heat),20C,7 (Auto),15 (Auto),Off,Off,00:00,Off,Off
+0.5,On,2 (Dry),26C,7 (Auto),1 (Highest),Off,Off,00:00,Off,Off
+風量,On,2 (Dry),26C,0 (Quiet),1 (Highest),Off,Off,00:00,Off,Off
+風量自動,On,2 (Dry),26C,7 (Auto),1 (Highest),Off,Off,00:00,Off,Off
+入1,Off,2 (Dry),27C,7 (Auto),1 (Highest),Off,Off,00:00,06:00,Off
+入2,Off,2 (Dry),27C,7 (Auto),1 (Highest),Off,Off,00:00,07:00,Off
+切1,On,3 (Cool),27C,7 (Auto),15 (Auto),Off,Off,00:00,Off,03:00
+
