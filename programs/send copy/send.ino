@@ -26,20 +26,22 @@
 #include <Arduino.h>
 #include <IRremoteESP8266.h>
 #include <IRsend.h>
-#include <ir_Mitsubishi.h>
+#include <ir_Panasonic.h>
 
-const uint16_t kIrLed = 4;  // ESP8266 GPIO pin to use. Recommended: 4 (D2).
-IRMitsubishiAC ac(kIrLed);  // Set the GPIO used for sending messages.
+const uint16_t kIrLed = 26;  // ESP8266 GPIO pin to use. Recommended: 4 (D2).
+IRPanasonicAc ac(kIrLed);  // Set the GPIO used for sending messages.
 
 void printState() {
   // Display the settings.
-  Serial.println("Mitsubishi A/C remote is in the following state:");
+  Serial.println("Panasonic A/C remote is in the following state:");
   Serial.printf("  %s\n", ac.toString().c_str());
   // Display the encoded IR sequence.
   unsigned char* ir_code = ac.getRaw();
   Serial.print("IR Code: 0x");
-  for (uint8_t i = 0; i < kMitsubishiACStateLength; i++)
+  for (uint8_t i = 0; i < kPanasonicAcStateLength; i++)
     Serial.printf("%02X", ir_code[i]);
+  Serial.println();
+  Serial.println();
   Serial.println();
 }
 
@@ -48,23 +50,42 @@ void setup() {
   Serial.begin(115200);
   delay(200);
 
-  // Set up what we want to send. See ir_Mitsubishi.cpp for all the options.
-  Serial.println("Default state of the remote.");
+  // Set up what we want to send. See ir_Panasonic.cpp for all the options.
+//  Serial.println("Default state of the remote.");
+//  printState();
+  
+  sendHeat();
+  
   printState();
-  Serial.println("Setting desired state for A/C.");
-  ac.on();
-  ac.setFan(1);
-  ac.setMode(kMitsubishiAcCool);
-  ac.setTemp(26);
-  ac.setVane(kMitsubishiAcVaneAuto);
 }
 
-void loop() {
-  // Now send the IR signal.
-#if SEND_MITSUBISHI_AC
-  Serial.println("Sending IR command to A/C ...");
+void sendCool(){
+  sendOrder(kPanasonicAcCool,27);
+}
+
+void sendHeat(){
+  sendOrder(kPanasonicAcHeat,24);
+}
+
+void sendOrder(uint8_t sendMode,uint8_t sendTemp){
+  Serial.println("Setting desired state for A/C.");
+  ac.setModel(kPanasonicRkr);
+  ac.on();
+  ac.setMode(sendMode);
+  ac.setTemp(sendTemp);
+  ac.setFan(kPanasonicAcFanAuto);
+  ac.setSwingVertical(kPanasonicAcSwingVAuto);
+  ac.setOffTimer(120);
   ac.send();
-#endif  // SEND_MITSUBISHI_AC
-  printState();
-  delay(5000);
+}
+
+
+void loop() {
+//  // Now send the IR signal.
+//#if SEND_PANASONIC_AC
+//  Serial.println("Sending IR command to A/C ...");
+//  ac.send();
+//#endif  // SEND_PANASONIC_AC
+//  printState();
+//  delay(5000);
 }
