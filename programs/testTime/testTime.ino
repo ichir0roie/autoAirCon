@@ -1,78 +1,36 @@
 #include <WiFi.h>
 
-#include "time.h"
 
 const char* ssid = "GaIB22";
 const char* password = "48ichg29af";
-
-
-#define JST 3600* 9
-
-void setup() {
-
-
+ 
+void setup() { 
   Serial.begin(115200);
-
-  Serial.println("Finishing setup");
-
-
-  Serial.println("start wifi");
-
-  // WiFi接続性改善のため、いったん切断
-  WiFi.disconnect( true, true ); //WiFi OFF, eraseAP=true
-  delay(500);
   
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.println('.');
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+
+  if (WiFi.begin(ssid, password) != WL_DISCONNECTED) {
+    ESP.restart();
   }
-
-
-  Serial.println("\r\nWiFi connected\r\nIP address: ");
-
-  Serial.println(WiFi.localIP());
-
-  configTime(JST, 0, "ntp.nict.jp", "ntp.jst.mfeed.ad.jp");
-
-  WiFi.disconnect(true);
-  WiFi.mode(WIFI_OFF);
+ 
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+  }
+  
+  Serial.println("Connected to the WiFi network!");
+  
+  configTime(9 * 3600L, 0, "ntp.nict.jp", "time.google.com", "ntp.jst.mfeed.ad.jp");//NTPの設定
 }
 
-
-struct tm timeinfo;
-
-int hour = 0;
-int minute = 0;
-
-int month = 0;
-int day = 0;
-
-String text = "";
+struct tm timeInfo;//時刻を格納するオブジェクト
+char s[20];//文字格納用
 
 void loop() {
+  getLocalTime(&timeInfo);//tmオブジェクトのtimeInfoに現在時刻を入れ込む
+  sprintf(s, " %04d/%02d/%02d %02d:%02d:%02d",
+          timeInfo.tm_year + 1900, timeInfo.tm_mon + 1, timeInfo.tm_mday,
+          timeInfo.tm_hour, timeInfo.tm_min, timeInfo.tm_sec);//人間が読める形式に変換
   delay(1000);
-  Serial.println("test print");
-
-  if (!getLocalTime(&timeinfo)) {
-    Serial.println("Failed to obtain time");
-    return;
-  }
-    hour = timeinfo.tm_hour;
-    minute = timeinfo.tm_min;
-
-    month = timeinfo.tm_mon;
-    day = timeinfo.tm_mday;
-
-  text =
-    String(month)
-    + "/"
-    + String(day)
-    + " "
-    + String(hour)
-    + ":"
-    + String(minute);
-
-  Serial.println(text);
-
+  Serial.println(s);//時間をシリアルモニタへ出力
 }
