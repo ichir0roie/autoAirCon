@@ -18,6 +18,8 @@ void setup() {
 
   delay(200);
 //  setupWifi();
+
+sendCool();
 }
 
 struct tm timeInfo;//時刻を格納するオブジェクト
